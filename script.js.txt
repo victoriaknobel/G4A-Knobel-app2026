@@ -1,0 +1,43 @@
+let pocet = 0;
+let cena = 0;
+
+fetch("produkty.csv")
+.then(res => res.text())
+.then(data => {
+    let radky = data.split("\n");
+
+    for (let i = 1; i < radky.length; i++) {
+        let bunky = radky[i].split(",");
+        let nazev = bunky[0];
+        let cenaProduktu = parseInt(bunky[1]);
+
+        let btn = document.createElement("button");
+        btn.innerText = nazev + " - " + cenaProduktu + " Kč";
+
+        btn.onclick = function() {
+            pocet++;
+            cena += cenaProduktu;
+
+            document.getElementById("pocet").innerText = pocet;
+            document.getElementById("cena").innerText = cena;
+        }
+
+        document.getElementById("produkty").appendChild(btn);
+    }
+});
+
+function odeslat() {
+    let jmeno = document.getElementById("jmeno").value;
+    let prijmeni = document.getElementById("prijmeni").value;
+    let email = document.getElementById("email").value;
+    let telefon = document.getElementById("telefon").value;
+
+    let text = "Objednavka: " + pocet + " kusu, celkem " + cena + " Kč";
+
+    window.location.href =
+        "mailto:app@kostka-skola.cz?subject=Objednavka&body=" +
+        text + "%0A" +
+        jmeno + " " + prijmeni + "%0A" +
+        email + "%0A" +
+        telefon;
+}
